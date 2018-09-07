@@ -1,0 +1,72 @@
+<h1>HAMMER Time</h1>
+<h3>MLK MTSS APP</h3>
+<div class="btns">
+  <%= link_to new_user_registration_path do %>
+    <div class="signup">Sign Up</div>
+  <% end %>
+  <%= link_to new_user_session_path do %>
+    <div class="login">Login</div>
+  <% end %>
+</div>
+<style>
+  body {
+    background-color: #fafafa;
+  }
+  h1 {
+    font-family: 'HKGrotesk-Bold';
+    font-size: 100px;
+    text-align: center;
+    color: #3c73ff;
+    margin-top:50%;
+  }
+  h3 {
+    font-family: 'HKGrotesk-Semi';
+    font-size: 50px;
+    text-align: center;
+    color: #3c73ff;
+  }
+  .signup {
+    text-transform: uppercase;
+    width: 500px;
+    height: 125px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 150px;
+    color:#3c73ff;
+    font-size: 50px;
+    font-family: 'HKGrotesk-Semi';
+    letter-spacing: 5px;
+    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+  }
+  .login {
+    text-transform: uppercase;
+    width: 500px;
+    height: 125px;
+    background-color: #3c73ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 150px;
+    color:#fff;
+    font-size: 50px;
+    font-family: 'HKGrotesk-Semi';
+    letter-spacing: 5px;
+    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    position: absolute;
+    bottom: 0;
+  }
+  .btns {
+    width: 500px;
+    height: 320px;
+    position: relative;
+    margin-left: -250px;
+    left: 50%;
+    margin-top: 70%;
+  }
+</style>

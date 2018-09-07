@@ -1,0 +1,279 @@
+<i class="fa fa-5x fa-angle-right"></i>
+<i class="fa fa-5x fa-angle-left"></i>
+<h1 class="day"><%= Date.today.strftime('%A') %></h1>
+<h2 class="date"><%= Date.today.strftime('%B %e') %></h2>
+<% if current_user.student? %>
+  <% (0..5).each do |i| %>
+    <p class="sub" style="position:relative; left: 70px; font-size: 28px;"><%= @departments[i] %> Department</p>
+    <% @users.where(dept: i).order('last ASC').each do |teacher| %>
+      <% unless @rooms.where(user_id: teacher.id, occurs: Date.today).first.nil? %>
+        <% room = @rooms.where(user_id: teacher.id, occurs: Date.today).first %>
+        <div class="card card-<%= room.id %>">
+          <h1 class="card-header header-<%= room.id %>"><%= teacher.last %></h1>
+          <p class="room subheader grey-<%= room.id %>">RM <%= teacher.room %></p>
+          <h2 class="class class-<%= room.id %>"><%= room.name %></h2>
+          <p class="text grey-<%= room.id %>"><%= room.desc %></p>
+          <% friends = 0 %>
+          <% friendarr = [] %>
+          <% unless current_user.friend == "[]" %>
+            <% eval(current_user.friend).each do |friend| %>
+              <% if User.find_by_id(friend).class_id == room.id %>
+                <% friends += 1 %>
+                <% friendarr.push(User.find_by_id(friend).first) %>
+              <% end %>
+            <% end %>
+          <% end %>
+          <% if current_user.class_id != room.id && friends > 0 %>
+            <% if friends == 1 %>
+              <p class="friend"><%= friends %> friend is attending this</p>
+            <% else %>
+              <p class="friend"><%= friends %> friends are attending this</p>
+            <% end %>
+          <% end %>
+          <p class="remaining left-<%= room.id %>">
+            <% if current_user.class_id == room.id %>
+              ATTENDING
+            <% elsif (room.capacity - @users.where(class_id: room.id).count) == 0 %>
+              FULL
+            <% else %>
+              <%= room.capacity - @users.where(class_id: room.id).count %> slots left
+            <% end %>
+          </p>
+        </div>
+        <% unless (room.capacity - @users.where(class_id: room.id).count) == 0 || current_user.class_id == room.id %>
+          <div class="signup-card signup-<%= room.id %>">
+            <p class="friends">
+              <% friendarr.each_with_index do |friend,index| %>
+                <%= friend %><% unless index == friendarr.size - 1 %>, <% end %>
+              <% end %>
+            </p>
+            <%= link_to signup_room_path(room.id), method: :patch do %><p class="attend">ATTEND</p><% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% else %>
+  <%= form_with(model: @room) do |form| %>
+
+    <%= form.hidden_field :user_id, value: current_user.id %>
+
+    <div class="field">
+      <%= form.label :name %>
+      <%= form.text_field :name %>
+    </div>
+
+    <div class="field">
+      <%= form.label :capacity %>
+      <%= form.number_field :capacity %>
+    </div>
+
+    <div class="field">
+      <%= form.label :description %>
+      <%= form.text_field :desc %>
+    </div>
+
+    <div class="actions">
+      <%= form.submit %>
+    </div>
+  <% end %>
+<% end %>
+<script>
+  $(document).ready(function() {
+    <% @rooms.each do |room| %>
+      $('.card-<%= room.id %>').click(function() {
+        $('.signup-card').animate({
+                          bottom: "190px",
+                          "margin-bottom": "-150px"
+                        },300 );
+        if ($('.signup-<%= room.id %>').css("bottom") != "90px") {
+          $('.signup-<%= room.id %>').animate({
+                            bottom: "90px",
+                            "margin-bottom": "-50px"
+                          },300 );
+        }else {
+          $('.signup-<%= room.id %>').animate({
+                            bottom: "190px",
+                            "margin-bottom": "-150px"
+                          },300 );
+        }
+      });
+    <% end %>
+  });
+</script>
+<style>
+html {
+  left: 0px;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+  body {
+    background-color: #fafafa;
+  }
+  .fa {
+    position: absolute;
+    right: 180px;
+    font-size: 100px;
+    color: #3c73ff;
+    top: 160px;
+  }
+  .fa-angle-left {
+    left: 180px;
+  }
+  .day {
+    font-family: 'HKGrotesk-Bold';
+    font-size: 70px;
+    text-align: center;
+    margin-top: 150px;
+    color: #3c73ff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+  }
+  .date {
+    font-family: 'HKGrotesk-Semi';
+    font-size: 55px;
+    text-align: center;
+    margin-top: 20px;
+    color: #3c73ff;
+    letter-spacing: 2px;
+    margin-bottom: 150px;
+  }
+  .sub {
+    font-family: 'HKGrotesk-Medium';
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #b4b4b4;
+  }
+  .card {
+    width: 700px;
+    height: 300px;
+    background-color: #fff;
+    border-radius: 20px;
+    position: relative;
+    left: 50%;
+    margin-left: -400px;
+    padding: 50px;
+    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    z-index: 2;
+    margin-bottom: 30px;
+  }
+  .signup-card {
+    width: 700px;
+    height: 50px;
+    background-color: #3c73ff;
+    border-radius: 20px;
+    left: 50%;
+    margin-left: -400px;
+    padding: 50px;
+    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    position: relative;
+    z-index: 1;
+    margin-bottom: -150px;
+    bottom: 190px;
+  }
+  .card:last-child {
+    opacity: .99;
+  }
+  .room {
+    float: right;
+    position: relative;
+    bottom: 75px;
+  }
+  .card-header {
+    font-family: 'HKGrotesk-Semi';
+    font-size: 55px;
+    color: #000;
+  }
+  .class {
+    font-family: 'HKGrotesk-Semi';
+    font-size: 30px;
+    text-transform: uppercase;
+    color: #3c73ff;
+    letter-spacing: 1px;
+    margin-top: 60px;
+  }
+  .text {
+    font-family: 'HKGrotesk-Medium';
+    font-size: 25px;
+    line-height: 25px;
+    margin-top: 20px;
+    color: #666;
+  }
+  .remaining {
+    font-family: 'HKGrotesk-Semi';
+    font-size: 25px;
+    margin-top: 20px;
+    position: absolute;
+    right: 50px;
+    bottom: 20px;
+    color: #3c73ff;
+  }
+  .friend {
+    font-family: 'HKGrotesk-Medium';
+    font-size: 25px;
+    margin-top: 20px;
+    position: absolute;
+    left: 50px;
+    bottom: 20px;
+    color: #b4b4b4;
+  }
+
+  .attend {
+    font-family: 'HKGrotesk-Medium';
+    font-size: 25px;
+    margin-top: 20px;
+    letter-spacing: 1px;
+    position: absolute;
+    right: 50px;
+    bottom: 10px;
+    color: #fff;
+  }
+
+  .friends {
+    font-family: 'HKGrotesk-Medium';
+    font-size: 22px;
+    margin-top: 20px;
+    letter-spacing: 2px;
+    position: absolute;
+    left: 70px;
+    bottom: 15px;
+    color: #fff;
+  }
+
+  <% @rooms.each do |room| %>
+    <% if current_user.class_id == room.id %>
+      .card-<%=room.id %> {
+        background-color: #3c73ff;
+      }
+      .header-<%=room.id %> {
+        color: #fff;
+      }
+      .class-<%=room.id %> {
+        color: #fff;
+      }
+      .grey-<%=room.id %> {
+        color: #fff;
+        opacity: .5;
+      }
+      .left-<%=room.id %> {
+        color: #fff;
+        font-family: 'HKGrotesk-Medium';
+        letter-spacing: 2px;
+      }
+    <% elsif (room.capacity - @users.where(class_id: room.id).count) == 0 %>
+      .class-<%=room.id %> {
+        color: #ff534d;
+      }
+      .left-<%=room.id %> {
+        color: #ff534d;
+        font-family: 'HKGrotesk-Medium';
+        letter-spacing: 2px;
+      }
+    <% end %>
+  <% end %>
+</style>
