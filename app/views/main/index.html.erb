@@ -15,8 +15,8 @@
           <p class="text grey-<%= room.id %>"><%= room.desc %></p>
           <% friends = 0 %>
           <% friendarr = [] %>
-          <% unless current_user.friend == "[]" %>
-            <% eval(current_user.friend).each do |friend| %>
+          <% unless current_user.friend == [] %>
+            <% current_user.friend.each do |friend| %>
               <% if User.find_by_id(friend).class_id == room.id %>
                 <% friends += 1 %>
                 <% friendarr.push(User.find_by_id(friend).first) %>
