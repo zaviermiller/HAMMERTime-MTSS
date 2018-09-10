@@ -1,24 +1,28 @@
-<h2>Please provide the following information</h2>
+<h2>Sign Up (cont.)</h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= devise_error_messages! %>
 
   <div class="field">
-    <%= f.label :department %><br />
-    <%= f.select :dept, options_for_select([["Science", "0"], ["Math", "1"], ["Social Studies", "2"], ["English", "3"], ["Fine Arts", "4"], ["Electives", "5"]]) %>
+    <%= f.select :dept, options_for_select([["Science", "0"], ["Math", "1"], ["Social Studies", "2"], ["English", "3"], ["Fine Arts", "4"], ["Electives", "5"]]),{prompt: "Department"}, {class: "input"} %>
   </div>
 
   <div class="field">
-    <%= f.label :room_number %><br />
-    <%= f.number_field :room %>
+    <%= f.number_field :room, placeholder: "Room #", class: "input" %>
   </div>
-
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "off" %>
-  </div>
-
   <div class="actions">
-    <%= f.submit "Update" %>
+    <%= f.submit "Finish", class: "submit" %>
   </div>
 <% end %>
+<style>
+h2 {
+  font-family: 'HKGrotesk-Bold';
+  font-size: 70px;
+  text-align: center;
+  margin-top: 150px;
+  color: #3c73ff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 200px;
+}
+</style>

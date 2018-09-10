@@ -6,6 +6,10 @@ class MainController < ApplicationController
       redirect_to main_home_path
 
     else
+      if current_user.today.nil?
+        current_user.today = Date.today
+        current_user.save!
+      end
 
       if current_user.today.sunday?
         current_user.today += 1
@@ -46,15 +50,36 @@ class MainController < ApplicationController
   def home
   end
 
+  def absent
+    @user = User.find_by(id: params[:id])
+    unless @user.absent?
+      @user.absent = true
+      @user.save!
+    else
+      @user.absent = false
+      @user.save!
+    end
+    redirect_to root_path
+  end
+
   def next
     current_user.today += 1
     current_user.save!
+
     redirect_to root_path
   end
 
   def prev
     current_user.today -= 1
     current_user.save!
+    if current_user.today.sunday?
+      current_user.today -= 2
+      current_user.save!
+    elsif current_user.today.saturday?
+      current_user.today -= 1
+      current_user.save!
+    end
+
     redirect_to root_path
   end
 

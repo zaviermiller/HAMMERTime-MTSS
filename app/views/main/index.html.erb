@@ -1,7 +1,5 @@
-<% unless current_user.today.monday? %>
+<% if current_user.teacher? %>
   <%= link_to main_prev_path, method: :patch do %><i class="fa fa-5x fa-angle-left"></i><% end %>
-<% end %>
-<% unless current_user.today.friday? %>
   <%= link_to main_next_path, method: :patch do %><i class="fa fa-5x fa-angle-right"></i><% end %>
 <% end %>
 <h1 class="day"><%= current_user.today.strftime('%A') %></h1>
@@ -14,13 +12,13 @@
         <% room = @rooms.where(user_id: teacher.id, occurs: current_user.today).first %>
         <div class="card card-<%= room.id %>">
           <h1 class="card-header header-<%= room.id %>"><%= teacher.last %></h1>
-          <p class="room subheader grey-<%= room.id %>">RM <%= teacher.room %></p>
+          <p class="room sub grey-<%= room.id %>">RM <%= teacher.room %></p>
           <h2 class="class class-<%= room.id %>"><%= room.name %></h2>
           <p class="text grey-<%= room.id %>"><%= room.desc %></p>
           <% friends = 0 %>
           <% friendarr = [] %>
           <% unless current_user.friend == [] %>
-            <% current_user.friend.each do |friend| %>
+            <% eval(current_user.friend).each do |friend| %>
               <% if User.find_by_id(friend).class_id == room.id %>
                 <% friends += 1 %>
                 <% friendarr.push(User.find_by_id(friend).first) %>
@@ -58,32 +56,57 @@
     <% end %>
   <% end %>
 <% else %>
-  <%= form_with(model: @room) do |form| %>
+  <% unless @rooms.exists?(user_id: current_user.id, occurs: current_user.today) %>
+    <%= form_with(model: @room) do |form| %>
 
-    <%= form.hidden_field :user_id, value: current_user.id %>
+      <%= form.hidden_field :user_id, value: current_user.id %>
 
-    <div class="field">
-      <%= form.label :name %>
-      <%= form.text_field :name %>
-    </div>
+      <div class="field">
+        <%= form.text_field :name, placeholder: "MTSS Name", class: "input" %>
+      </div>
 
-    <div class="field">
-      <%= form.label :capacity %>
-      <%= form.number_field :capacity %>
-    </div>
+      <div class="field">
+        <%= form.number_field :capacity, placeholder: "Capacity",class: "input" %>
+      </div>
 
-    <div class="field">
-      <%= form.label :description %>
-      <%= form.text_field :desc %>
-    </div>
+      <div class="field">
+        <%= form.text_field :desc, placeholder: "Description", class: "input" %>
+      </div>
 
-    <div class="actions">
-      <%= form.submit %>
-    </div>
+      <%= form.hidden_field :occurs, value: current_user.today %>
+
+      <div class="actions">
+        <%= form.submit "Submit", class: "submit" %>
+      </div>
+    <% end %>
+  <% else %>
+    <% room = @rooms.where(user_id: current_user.id, occurs: current_user.today).first %>
+    <% if room.occurs == Date.today %>
+      <p class="sub" style="position:relative; left: 110px; font-size: 30px;">Attendance</p>
+      <% User.where(class_id: room.id).each do |student| %>
+        <% if student.absent? && room.occurs == Date.today %>
+          <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext red"><%= student.first %> <%= student.last %></p></div><% end %>
+        <% elsif !student.absent? && room.occurs == Date.today %>
+          <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext"><%= student.first %> <%= student.last %></p></div><% end %>
+        <% end %>
+      <% end %>
+    <% else %>
+    <p class="sub" style="position:relative; left: 110px; font-size: 30px;">Your MTSS</p>
+      <div class="card">
+        <h1 class="card-header"><%= current_user.last %></h1>
+        <p class="room sub">RM <%= current_user.room %></p>
+        <h2 class="class"><%= room.name %></h2>
+        <p class="text"><%= room.desc %></p>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
 <script>
   $(document).ready(function() {
+    $('.attendance').click(function(){
+      $(this).css('background-color','#ff534d');
+      $('.atext').css('color','#fff');
+    });
     <% @rooms.each do |room| %>
       $('.card-<%= room.id %>').click(function() {
         $('.signup-card').animate({
@@ -117,14 +140,15 @@ html {
   }
   .fa {
     position: absolute;
-    right: 180px;
     font-size: 100px;
     color: #3c73ff;
-    top: 160px;
+    top: 135px;
   }
   .fa-angle-left {
     left: 180px;
-    width: 50px;
+  }
+  .fa-angle-right {
+    right: 180px;
   }
   .day {
     font-family: 'HKGrotesk-Bold';
@@ -188,6 +212,7 @@ html {
     float: right;
     position: relative;
     bottom: 75px;
+    font-size: 17px;
   }
   .card-header {
     font-family: 'HKGrotesk-Semi';
@@ -248,6 +273,31 @@ html {
     left: 70px;
     bottom: 15px;
     color: #fff;
+  }
+  .attendance {
+    width: 750px;
+    height: 160px;
+    margin-left: -375px;
+    left: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 600px;
+    background-color: #fff;
+    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+  }
+  .atext {
+    text-align: center;
+    font-size:60px;
+    color: #3c73ff;
+    font-family: 'HKGrotesk-Medium';
+    letter-spacing: 5px;
+  }
+    .red{
+    color: #ff534d;
   }
 
   <% @rooms.each do |room| %>

@@ -3,7 +3,7 @@
   <head>
     <title>MTSS</title>
     <%= csrf_meta_tags %>
-    <meta name="viewport" content=" user-scalable=0"/> <!--320-->
+    <meta name="viewport" content=" user-scalable=0"/>
 
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -17,5 +17,60 @@
 
   <body>
     <%= yield %>
+    <style>
+    body {
+      overflow-y: scroll;
+    }
+    .input {
+      width: 750px;
+      height: 130px;
+      position: relative;
+      left: 50%;
+      margin-left: -400px;
+      font-family: 'HKGrotesk-Medium';
+      letter-spacing: 4px;
+      border-radius: 15px;
+      font-size: 50px;
+      padding-left: 50px;
+      border:none;
+      -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+      -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+      box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+      margin-bottom: 50px;
+    }
+    .submit {
+      margin-top: 100px;
+      text-transform: uppercase;
+      width: 500px;
+      margin-left: -250px;
+      left: 50%;
+      position: relative;
+      height: 125px;
+      background-color: #3c73ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 150px;
+      color:#fff;
+      font-size: 50px;
+      font-family: 'HKGrotesk-Semi';
+      letter-spacing: 5px;
+      -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+      -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+      box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    }
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+      color: #ccc;
+      opacity: 1; /* Firefox */
+    }
+
+    :-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: #ccc;
+    }
+
+    ::-ms-input-placeholder { /* Microsoft Edge */
+        color: #ccc;
+    }
+    </style>
   </body>
 </html>

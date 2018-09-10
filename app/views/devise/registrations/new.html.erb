@@ -4,46 +4,47 @@
   <%= devise_error_messages! %>
 
   <div class="field">
-    <%= f.label :studentid %><br />
-    <%= f.text_field :studentid, autofocus: true, autocomplete: "off" %>
+    <%= f.text_field :studentid, autofocus: true, autocomplete: "off", required: true, placeholder: "Student ID", class: "input" %>
   </div>
 
   <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autocomplete: "off", required: true %>
+    <%= f.email_field :email, autocomplete: "off", required: true, required: true, placeholder: "Email", class: "input" %>
   </div>
 
   <div class="field">
-    <%= f.label :first %><br />
-    <%= f.text_field :first, autocomplete: "off" %>
+    <%= f.text_field :first, autocomplete: "off", required: true, placeholder: "First name", class: "input" %>
   </div>
 
   <div class="field">
-    <%= f.label :last %><br />
-    <%= f.text_field :last, autocomplete: "off" %>
+    <%= f.text_field :last, autocomplete: "off", required: true, placeholder: "Last name", class: "input" %>
   </div>
 
   <div class="field">
-    <%= f.label :mtss_homeroom %><br />
-    <%= f.select(:home, User.all.where(role: 1).collect {|a| [a.last, a.id]}) %>
+    <%= f.select(:home, User.all.where(role: 1).collect {|a| [a.last, a.id]}, {prompt: "MTSS Homeroom", required: true}, {class: "input"}) %>
   </div>
 
   <div class="field">
-    <%= f.label :password %>
-    <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
+    <%= f.password_field :password, autocomplete: "off", required: true, placeholder: "Password", class: "input" %>
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+    <%= f.password_field :password_confirmation, autocomplete: "off", required: true, placeholder: "Confirm Password", class: "input" %>
   </div>
 
   <div class="actions">
-    <%= f.submit "Sign up" %>
+    <%= f.submit "Sign up", class: "submit" %>
   </div>
 <% end %>
+<style>
 
-<%= render "devise/shared/links" %>
+h2 {
+  font-family: 'HKGrotesk-Bold';
+  font-size: 70px;
+  text-align: center;
+  margin-top: 150px;
+  color: #3c73ff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 200px;
+}
+</style>

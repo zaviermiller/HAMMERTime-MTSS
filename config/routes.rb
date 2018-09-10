@@ -7,12 +7,14 @@ Rails.application.routes.draw do
     end
   end
   devise_for :users, controllers: {
-        sessions: 'users/sessions'
+        sessions: 'users/sessions',
+        registrations: 'users/registrations'
       }
   get 'main/index'
   get 'main/home'
   patch 'main/next'
   patch 'main/prev'
+  patch '/absent/:id', to: "main#absent", as: "absent"
 
 
   root 'main#index'
