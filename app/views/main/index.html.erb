@@ -1,13 +1,17 @@
-<i class="fa fa-5x fa-angle-right"></i>
-<i class="fa fa-5x fa-angle-left"></i>
-<h1 class="day"><%= Date.today.strftime('%A') %></h1>
-<h2 class="date"><%= Date.today.strftime('%B %e') %></h2>
+<% unless current_user.today.monday? %>
+  <%= link_to main_prev_path, method: :patch do %><i class="fa fa-5x fa-angle-left"></i><% end %>
+<% end %>
+<% unless current_user.today.friday? %>
+  <%= link_to main_next_path, method: :patch do %><i class="fa fa-5x fa-angle-right"></i><% end %>
+<% end %>
+<h1 class="day"><%= current_user.today.strftime('%A') %></h1>
+<h2 class="date"><%= current_user.today.strftime('%B %e') %></h2>
 <% if current_user.student? %>
   <% (0..5).each do |i| %>
     <p class="sub" style="position:relative; left: 70px; font-size: 28px;"><%= @departments[i] %> Department</p>
     <% @users.where(dept: i).order('last ASC').each do |teacher| %>
-      <% unless @rooms.where(user_id: teacher.id, occurs: Date.today).first.nil? %>
-        <% room = @rooms.where(user_id: teacher.id, occurs: Date.today).first %>
+      <% unless @rooms.where(user_id: teacher.id, occurs: current_user.today).first.nil? %>
+        <% room = @rooms.where(user_id: teacher.id, occurs: current_user.today).first %>
         <div class="card card-<%= room.id %>">
           <h1 class="card-header header-<%= room.id %>"><%= teacher.last %></h1>
           <p class="room subheader grey-<%= room.id %>">RM <%= teacher.room %></p>
@@ -120,6 +124,7 @@ html {
   }
   .fa-angle-left {
     left: 180px;
+    width: 50px;
   }
   .day {
     font-family: 'HKGrotesk-Bold';

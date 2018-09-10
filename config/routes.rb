@@ -6,9 +6,13 @@ Rails.application.routes.draw do
       patch :leave
     end
   end
-  devise_for :users
+  devise_for :users, controllers: {
+        sessions: 'users/sessions'
+      }
   get 'main/index'
   get 'main/home'
+  patch 'main/next'
+  patch 'main/prev'
 
 
   root 'main#index'
