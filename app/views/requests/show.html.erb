@@ -3,7 +3,7 @@
     <p class="no">No students with that first name.</p>
   <% else %>
     <% User.all.where(first: @request.name.capitalize).where.not(id: current_user.id, role: 1).each do |friend| %>
-      <% unless current_user.friend.include?(friend.id) %>
+      <% unless current_user.friend.include?(friend.id.to_s) %>
         <%= link_to add_path(friend),method: :patch do %><div class="friend-div"><p class="text"><%= friend.first %> <%= friend.last %></p></div><% end %>
       <% else %>
         <div class="friend-div active"><p class="text"><%= friend.first %> <%= friend.last %></p></div>

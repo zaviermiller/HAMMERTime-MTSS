@@ -19,11 +19,6 @@ class MainController < ApplicationController
         current_user.save!
       end
 
-
-      if @date.nil?
-        @date = Date.today
-      end
-
       if current_user.studentid.include?("teacher") && current_user.dept.nil?
         redirect_to edit_user_registration_path(current_user)
       end

@@ -1,5 +1,7 @@
-<% if current_user.teacher? %>
+<% unless current_user.student? && current_user.today.monday? %>
   <%= link_to main_prev_path, method: :patch do %><i class="fa fa-5x fa-angle-left"></i><% end %>
+<% end %>
+<% unless current_user.student? && current_user.today.friday? %>
   <%= link_to main_next_path, method: :patch do %><i class="fa fa-5x fa-angle-right"></i><% end %>
 <% end %>
 <h1 class="day"><%= current_user.today.strftime('%A') %></h1>
@@ -39,7 +41,11 @@
             <% elsif (room.capacity - @users.where(class_id: room.id).count) == 0 %>
               FULL
             <% else %>
-              <%= room.capacity - @users.where(class_id: room.id).count %> slots left
+              <% if room.capacity - @users.where(class_id: room.id).count == 1 %>
+                <%= room.capacity - @users.where(class_id: room.id).count %> slot left
+              <% else %>
+                <%= room.capacity - @users.where(class_id: room.id).count %> slots left
+              <% end %>
             <% end %>
           </p>
         </div>
@@ -98,6 +104,13 @@
         <p class="room sub">RM <%= current_user.room %></p>
         <h2 class="class"><%= room.name %></h2>
         <p class="text"><%= room.desc %></p>
+        <p class="remaining">
+          <% if @users.where(class_id: room.id).count == 1 %>
+            <%= @users.where(class_id: room.id).count %> person attending this class
+          <% else %>
+            <%= @users.where(class_id: room.id).count %> people attending this class
+          <% end %>
+        </p>
       </div>
     <% end %>
   <% end %>
@@ -108,25 +121,27 @@
       $(this).css('background-color','#ff534d');
       $('.atext').css('color','#fff');
     });
-    <% @rooms.each do |room| %>
-      $('.card-<%= room.id %>').click(function() {
-        $('.signup-card').animate({
-                          bottom: "190px",
-                          "margin-bottom": "-150px"
-                        },300 );
-        if ($('.signup-<%= room.id %>').css("bottom") != "90px") {
-          $('.signup-<%= room.id %>').animate({
-                            bottom: "90px",
-                            "margin-bottom": "-50px"
-                          },300 );
-        }else {
-          $('.signup-<%= room.id %>').animate({
+      <% @rooms.each do |room| %>
+        <% if room.occurs == Date.today %>
+        $('.card-<%= room.id %>').click(function() {
+          $('.signup-card').animate({
                             bottom: "190px",
                             "margin-bottom": "-150px"
                           },300 );
-        }
-      });
-    <% end %>
+          if ($('.signup-<%= room.id %>').css("bottom") != "90px") {
+            $('.signup-<%= room.id %>').animate({
+                              bottom: "90px",
+                              "margin-bottom": "-50px"
+                            },300 );
+          }else {
+            $('.signup-<%= room.id %>').animate({
+                              bottom: "190px",
+                              "margin-bottom": "-150px"
+                            },300 );
+          }
+        });
+        <% end %>
+      <% end %>
   });
 </script>
 <style>
@@ -354,3 +369,10 @@ html {
     <% end %>
   <% end %>
 </style>
+<% if current_user.student? %>
+<style>
+.fa {
+  top: 180px;
+}
+</style>
+<% end %>
