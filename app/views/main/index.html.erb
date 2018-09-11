@@ -4,8 +4,8 @@
 <% unless current_user.student? && current_user.today.friday? %>
   <%= link_to main_next_path, method: :patch do %><i class="fa fa-5x fa-angle-right"></i><% end %>
 <% end %>
-<h1 class="day"><%= current_user.today.strftime('%A') %></h1>
-<h2 class="date"><%= current_user.today.strftime('%B %e') %></h2>
+<p class="day"><%= current_user.today.strftime('%A') %></p>
+<p class="date"><%= current_user.today.strftime('%B %e') %></p>
 <% if current_user.student? %>
   <%= link_to new_request_path do %><div class="add">Add Friends</div><% end %>
   <% (0..5).each do |i| %>
