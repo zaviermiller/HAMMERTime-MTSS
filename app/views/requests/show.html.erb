@@ -4,9 +4,9 @@
   <% else %>
     <% User.all.where(first: @request.name.capitalize).where.not(id: current_user.id, role: 1).each do |friend| %>
       <% unless current_user.friend.include?(friend.id) %>
-        <%= link_to add_path(friend),method: :patch do %><div class="friend-div active"><p class="text"><%= friend.first %> <%= friend.last %></p></div><% end %>
+        <%= link_to add_path(friend),method: :patch do %><div class="friend-div"><p class="text"><%= friend.first %> <%= friend.last %></p></div><% end %>
       <% else %>
-        <div class="friend-div"><p class="text"><%= friend.first %> <%= friend.last %></p></div>
+        <div class="friend-div active"><p class="text"><%= friend.first %> <%= friend.last %></p></div>
       <% end %>
     <% end %>
   <% end %>
