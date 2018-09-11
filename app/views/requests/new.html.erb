@@ -1,0 +1,23 @@
+<h2>Add a Friend</h2>
+
+<%= form_with(model: @request) do |form| %>
+  <div class="field">
+    <%= form.text_field :name, placeholder: "Friend's first name", class: "input" %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Search", class: "submit" %>
+  </div>
+<% end %>
+<style>
+h2 {
+  font-family: 'HKGrotesk-Bold';
+  font-size: 70px;
+  text-align: center;
+  margin-top: 150px;
+  color: #3c73ff;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  margin-bottom: 200px;
+}
+</style>

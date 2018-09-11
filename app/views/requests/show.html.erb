@@ -1,0 +1,57 @@
+<h2>Students</h2>
+  <% if User.all.where(first: @request.name.capitalize).where.not(id: current_user.id, role: 1).count == 0 %>
+    <p class="no">No students with that first name.</p>
+  <% else %>
+    <% User.all.where(first: @request.name.capitalize).where.not(id: current_user.id, role: 1).each do |friend| %>
+      <% if current_user.friend.include?(friend.id) %>
+        <%= link_to add_path(friend),method: :patch do %><div class="friend-div active"><p class="text"><%= friend.first %> <%= friend.last %></p></div><% end %>
+      <% else %>
+        <div class="friend-div"><p class="text"><%= friend.first %> <%= friend.last %></p></div>
+      <% end %>
+    <% end %>
+  <% end %>
+  <style>
+  .no {
+    font-family: 'HKGrotesk-Medium';
+    letter-spacing: 1.5px;
+    text-align: center;
+    font-size: 35px;
+    color: #b4b4b4;
+  }
+  h2 {
+    font-family: 'HKGrotesk-Bold';
+    font-size: 70px;
+    text-align: center;
+    margin-top: 150px;
+    color: #3c73ff;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 200px;
+  }
+  .friend-div {
+    width: 750px;
+    height: 160px;
+    margin-left: -375px;
+    left: 50%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 600px;
+    background-color: #fff;
+    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+  }
+  .text {
+    text-align: center;
+    font-size:60px;
+    color: #3c73ff;
+    font-family: 'HKGrotesk-Medium';
+    letter-spacing: 5px;
+  }
+  .active, .active > p {
+    color: #fff;
+    background-color: #3c73ff;
+  }
+  </style>
