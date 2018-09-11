@@ -25,6 +25,8 @@ class MainController < ApplicationController
 
       if current_user.role.nil? && !current_user.studentid.include?("teacher")
         current_user.student!
+        current_user.first.capitalize!
+        current_user.last.capitalize!
         current_user.friend = []
         current_user.save!
       elsif current_user.studentid.include?("teacher")

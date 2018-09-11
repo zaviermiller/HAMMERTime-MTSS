@@ -20,7 +20,7 @@
   </div>
 
   <div class="field">
-    <%= f.select(:home, User.all.where(role: 1).collect {|a| [a.last, a.id]}, {prompt: "MTSS Homeroom", required: true}, {class: "input"}) %>
+    <%= f.select(:home, User.all.where(role: 1).collect {|a| [a.last, a.id]}, {include_blank: "MTSS Homeroom"}, {class: "input", required: true}) %>
   </div>
 
   <div class="field">
