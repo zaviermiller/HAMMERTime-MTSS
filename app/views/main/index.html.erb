@@ -5,6 +5,7 @@
 <h1 class="day"><%= current_user.today.strftime('%A') %></h1>
 <h2 class="date"><%= current_user.today.strftime('%B %e') %></h2>
 <% if current_user.student? %>
+  <%= link_to new_request_path do %><div class="add">Add Friends</div><% end %>
   <% (0..5).each do |i| %>
     <p class="sub" style="position:relative; left: 70px; font-size: 28px;"><%= @departments[i] %> Department</p>
     <% @users.where(dept: i).order('last ASC').each do |teacher| %>
@@ -18,7 +19,7 @@
           <% friends = 0 %>
           <% friendarr = [] %>
           <% unless current_user.friend == [] %>
-            <% current_user.friend.each do |friend| %>
+            <% eval(current_user.friend).each do |friend| %>
               <% if User.find_by_id(friend).class_id == room.id %>
                 <% friends += 1 %>
                 <% friendarr.push(User.find_by_id(friend).first) %>
@@ -299,6 +300,27 @@ html {
     .red{
     color: #ff534d;
   }
+  .add {
+      margin-bottom: 50px;
+      text-transform: uppercase;
+      width: 400px;
+      margin-left: -200px;
+      left: 50%;
+      position: relative;
+      height: 100px;
+      background-color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 150px;
+      color:#3c73ff;
+      font-size: 35px;
+      font-family: 'HKGrotesk-Semi';
+      letter-spacing: 5px;
+      -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+      -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+      box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
+    }
 
   <% @rooms.each do |room| %>
     <% if current_user.class_id == room.id %>

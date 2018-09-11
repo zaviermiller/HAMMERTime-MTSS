@@ -14,8 +14,7 @@ class RequestsTest < ApplicationSystemTestCase
     visit requests_url
     click_on "New Request"
 
-    fill_in "Studentid", with: @request.studentid
-    fill_in "User", with: @request.user_id
+    fill_in "Name", with: @request.name
     click_on "Create Request"
 
     assert_text "Request was successfully created"
@@ -26,8 +25,7 @@ class RequestsTest < ApplicationSystemTestCase
     visit requests_url
     click_on "Edit", match: :first
 
-    fill_in "Studentid", with: @request.studentid
-    fill_in "User", with: @request.user_id
+    fill_in "Name", with: @request.name
     click_on "Update Request"
 
     assert_text "Request was successfully updated"

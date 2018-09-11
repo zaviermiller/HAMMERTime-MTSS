@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   patch 'main/next'
   patch 'main/prev'
   patch '/absent/:id', to: "main#absent", as: "absent"
+  patch '/add-friend/:id', to: "main#addfriend", as: "add"
 
 
   root 'main#index'

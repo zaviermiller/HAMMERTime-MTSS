@@ -83,4 +83,12 @@ class MainController < ApplicationController
     redirect_to root_path
   end
 
+  def addfriend
+    @friend = User.find_by(id: params[:id])
+    current_user.friend = eval(current_user.friend).push(@friend.id)
+    current_user.save!
+    redirect_to root_path
+
+  end
+
 end
