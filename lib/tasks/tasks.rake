@@ -16,7 +16,7 @@ namespace :tasks do
 
   desc "Destroy all rooms on Friday"
   task delete_rooms: :environment do
-    if Date.today.friday?
+    if Date.today.saturday?
       print("Deleting rooms...")
       Room.delete_all
       print("Past week rooms deleted.")
