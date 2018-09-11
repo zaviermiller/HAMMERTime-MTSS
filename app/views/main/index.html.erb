@@ -14,9 +14,9 @@
       <% unless @rooms.where(user_id: teacher.id, occurs: current_user.today).first.nil? %>
         <% room = @rooms.where(user_id: teacher.id, occurs: current_user.today).first %>
         <div class="card card-<%= room.id %>">
-          <h1 class="card-header header-<%= room.id %>"><%= teacher.last %></h1>
+          <p class="card-header header-<%= room.id %>"><%= teacher.last %></p>
           <p class="room sub grey-<%= room.id %>">RM <%= teacher.room %></p>
-          <h2 class="class class-<%= room.id %>"><%= room.name %></h2>
+          <p class="class class-<%= room.id %>"><%= room.name %></p>
           <p class="text grey-<%= room.id %>"><%= room.desc %></p>
           <% friends = 0 %>
           <% friendarr = [] %>
@@ -100,9 +100,9 @@
     <% else %>
     <p class="sub" style="position:relative; left: 110px; font-size: 30px;">Your MTSS</p>
       <div class="card">
-        <h1 class="card-header"><%= current_user.last %></h1>
+        <p class="card-header"><%= current_user.last %></p>
         <p class="room sub">RM <%= current_user.room %></p>
-        <h2 class="class"><%= room.name %></h2>
+        <p class="class"><%= room.name %></p>
         <p class="text"><%= room.desc %></p>
         <p class="remaining">
           <% if @users.where(class_id: room.id).count == 1 %>
