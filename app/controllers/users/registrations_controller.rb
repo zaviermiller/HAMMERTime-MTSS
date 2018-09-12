@@ -22,6 +22,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       current_user.student!
       current_user.friend = []
       current_user.save!
+    end
   end
 
   # GET /resource/edit
