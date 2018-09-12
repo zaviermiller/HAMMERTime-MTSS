@@ -2,38 +2,12 @@ class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update, :destroy]
   before_action :is_teacher, except: [:signup]
 
-  # GET /rooms
-  # GET /rooms.json
-  def index
-    @rooms = Room.all
-  end
-
-  # GET /rooms/1
-  # GET /rooms/1.json
-  def show
-  end
-
-  # GET /rooms/new
-  def new
-    @room = Room.new
-  end
-
-  # GET /rooms/1/edit
-  def edit
-  end
-
   def signup
     @room = Room.find(params[:id])
     unless (@room.capacity - User.all.where(class_id: @room).count) == 0
       current_user.class_id = @room.id
       current_user.save!
     end
-    redirect_to root_path
-  end
-
-  def leave
-    current_user.class_id = 0
-    current_user.save!
     redirect_to root_path
   end
 
