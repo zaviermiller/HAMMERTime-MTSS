@@ -7,7 +7,7 @@ class MainController < ApplicationController
 
     else
       if current_user.today.nil?
-        current_user.today = Date.today
+        current_user.today = Time.zone.today
         current_user.save!
       end
 

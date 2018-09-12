@@ -7,7 +7,7 @@ namespace :tasks do
     print("Setting user data...")
     User.all.each do |user|
       user.absent = false
-      user.today = Date.today
+      user.today = Time.zone.today
       user.save!
       print('Data reset for ' + user.first + ' ' + user.last + '.')
     end
@@ -16,7 +16,7 @@ namespace :tasks do
 
   desc "Destroy all rooms on Friday"
   task delete_rooms: :environment do
-    if Date.today.saturday?
+    if Time.zone.today.saturday?
       print("Deleting rooms...")
       Room.delete_all
       print("Past week rooms deleted.")

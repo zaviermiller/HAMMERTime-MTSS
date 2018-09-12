@@ -88,12 +88,12 @@
     <% end %>
   <% else %>
     <% room = @rooms.where(user_id: current_user.id, occurs: current_user.today).first %>
-    <% if room.occurs == Date.today %>
+    <% if room.occurs == Time.zone.today %>
       <p class="sub" style="position:relative; left: 110px; font-size: 30px;">Attendance</p>
       <% User.where(class_id: room.id).each do |student| %>
-        <% if student.absent? && room.occurs == Date.today %>
+        <% if student.absent? && room.occurs == Time.zone.today %>
           <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext red"><%= student.first %> <%= student.last %></p></div><% end %>
-        <% elsif !student.absent? && room.occurs == Date.today %>
+        <% elsif !student.absent? && room.occurs == Time.zone.today %>
           <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext"><%= student.first %> <%= student.last %></p></div><% end %>
         <% end %>
       <% end %>
@@ -122,7 +122,7 @@
       $('.atext').css('color','#fff');
     });
       <% @rooms.each do |room| %>
-        <% if room.occurs == Date.today %>
+        <% if room.occurs == Time.zone.today %>
         $('.card-<%= room.id %>').click(function() {
           $('.signup-card').animate({
                             bottom: "190px",

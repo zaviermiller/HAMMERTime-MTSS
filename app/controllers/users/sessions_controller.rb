@@ -11,7 +11,7 @@ class Users::SessionsController < Devise::SessionsController
   # POST /resource/sign_in
   def create
     super
-    current_user.today = Date.today
+    current_user.today = Time.zone.today
     current_user.save!
   end
 
