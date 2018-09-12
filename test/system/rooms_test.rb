@@ -36,6 +36,4 @@ class RoomsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-    assert_text "Room was successfully destroyed"
-  end
 end

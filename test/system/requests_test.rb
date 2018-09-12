@@ -31,8 +31,4 @@ class RequestsTest < ApplicationSystemTestCase
     assert_text "Request was successfully updated"
     click_on "Back"
   end
-
-
-    assert_text "Request was successfully destroyed"
-  end
 end
