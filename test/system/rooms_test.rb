@@ -36,12 +36,6 @@ class RoomsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Room" do
-    visit rooms_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
-
     assert_text "Room was successfully destroyed"
   end
 end

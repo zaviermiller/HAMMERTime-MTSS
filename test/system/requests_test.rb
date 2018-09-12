@@ -32,11 +32,6 @@ class RequestsTest < ApplicationSystemTestCase
     click_on "Back"
   end
 
-  test "destroying a Request" do
-    visit requests_url
-    page.accept_confirm do
-      click_on "Destroy", match: :first
-    end
 
     assert_text "Request was successfully destroyed"
   end
