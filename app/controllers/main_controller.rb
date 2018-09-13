@@ -7,6 +7,10 @@ class MainController < ApplicationController
 
     else
 
+      if current_user.teacher? && current_user.room.nil?
+        redirect_to edit_user_registration_path(current_user)
+      end
+
       @users = User.all
       @rooms = Room.all
       @room = Room.new

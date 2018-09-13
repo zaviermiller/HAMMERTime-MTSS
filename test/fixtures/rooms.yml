@@ -4,8 +4,10 @@ one:
   user: 2
   name: MyString
   capacity: 1
+  desc: "test desc"
 
 two:
   user: 1
   name: MyString
   capacity: 1
+  desc: "test desc"

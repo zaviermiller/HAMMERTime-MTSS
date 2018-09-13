@@ -1,15 +1,14 @@
 <% unless current_user.student? && current_user.today.monday? %>
-  <%= link_to main_prev_path, method: :patch do %><i class="fa fa-5x fa-angle-left"></i><% end %>
+  <%= link_to main_prev_path, method: :patch do %><i class="fa fa-angle-left"></i><% end %>
 <% end %>
 <% unless current_user.student? && current_user.today.friday? %>
-  <%= link_to main_next_path, method: :patch do %><i class="fa fa-5x fa-angle-right"></i><% end %>
+  <%= link_to main_next_path, method: :patch do %><i class="fa fa-angle-right"></i><% end %>
 <% end %>
 <p class="day"><%= current_user.today.strftime('%A') %></p>
 <p class="date"><%= current_user.today.strftime('%B %e') %></p>
 <% if current_user.student? %>
-  <%= link_to new_request_path do %><div class="add">Add Friends</div><% end %>
   <% (0..5).each do |i| %>
-    <p class="sub" style="position:relative; left: 70px; font-size: 28px;"><%= @departments[i] %> Department</p>
+    <p class="sub" style="position:relative; left: 30px; font-size: 12px;"><%= @departments[i] %> Department</p>
     <% @users.where(dept: i).order('last ASC').each do |teacher| %>
       <% unless @rooms.where(user_id: teacher.id, occurs: current_user.today).first.nil? %>
         <% room = @rooms.where(user_id: teacher.id, occurs: current_user.today).first %>
@@ -21,7 +20,7 @@
           <% friends = 0 %>
           <% friendarr = [] %>
           <% unless current_user.friend == [] %>
-            <% current_user.friend.each do |friend| %>
+            <% eval(current_user.friend).each do |friend| %>
               <% if User.find_by_id(friend).class_id == room.id %>
                 <% friends += 1 %>
                 <% friendarr.push(User.find_by_id(friend).first) %>
@@ -89,7 +88,7 @@
   <% else %>
     <% room = @rooms.where(user_id: current_user.id, occurs: current_user.today).first %>
     <% if room.occurs == Time.zone.today %>
-      <p class="sub" style="position:relative; left: 110px; font-size: 30px;">Attendance</p>
+      <p class="sub" style="position:relative; left: 60px; font-size: 12px;">Attendance</p>
       <% User.where(class_id: room.id).each do |student| %>
         <% if student.absent? && room.occurs == Time.zone.today %>
           <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext red"><%= student.first %> <%= student.last %></p></div><% end %>
@@ -98,7 +97,7 @@
         <% end %>
       <% end %>
     <% else %>
-    <p class="sub" style="position:relative; left: 110px; font-size: 30px;">Your MTSS</p>
+    <p class="sub" style="position:relative; left: 40px; font-size: 12px;">Your MTSS</p>
       <div class="card">
         <p class="card-header"><%= current_user.last %></p>
         <p class="room sub">RM <%= current_user.room %></p>
@@ -153,69 +152,70 @@ html {
 }
   body {
     background-color: #fafafa;
+    margin: 33px 0 !important;
   }
   .fa {
     position: absolute;
-    font-size: 100px;
+    font-size: 35px;
     color: #3c73ff;
-    top: 160px;
+    top: 70px;
   }
   .fa-angle-left {
-    left: 100px;
+    left: 50px;
   }
   .fa-angle-right {
-    right: 100px;
+    right: 50px;
   }
   .day {
     font-family: 'HKGrotesk-Bold';
-    font-size: 70px;
+    font-size: 27px;
     text-align: center;
-    margin-top: 150px;
+    margin-top: 35px;
     color: #3c73ff;
     text-transform: uppercase;
-    letter-spacing: 4px;
+    letter-spacing: 1.75px;
   }
   .date {
     font-family: 'HKGrotesk-Medium';
-    font-size: 55px;
+    font-size: 20px;
     text-align: center;
-    margin-top: 10px;
     color: #3c73ff;
-    letter-spacing: 2px;
-    margin-bottom: 150px;
+    margin-top: -15px;
+    letter-spacing: 1px;
+    margin-bottom: 50px;
   }
   .sub {
     font-family: 'HKGrotesk-Medium';
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     color: #b4b4b4;
   }
   .card {
-    width: 700px;
-    height: 300px;
+    width: 280px;
     background-color: #fff;
-    border-radius: 20px;
+    height: 110px;
+    border-radius: 10px;
     position: relative;
     left: 50%;
-    margin-left: -400px;
-    padding: 50px;
-    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
-    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
-    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    margin-left: -165px;
+    padding: 25px;
+    -webkit-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
     z-index: 2;
     margin-bottom: 30px;
   }
   .signup-card {
-    width: 700px;
+    width: 280px;
     height: 50px;
     background-color: #3c73ff;
-    border-radius: 20px;
+    border-radius: 10px;
     left: 50%;
-    margin-left: -400px;
-    padding: 50px;
-    -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
-    -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
-    box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
+    margin-left: -165px;
+    padding: 25px;
+    -webkit-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
     position: relative;
     z-index: 1;
     margin-bottom: -150px;
@@ -227,36 +227,42 @@ html {
   .room {
     float: right;
     position: relative;
-    bottom: 75px;
-    font-size: 24px;
+    font-size: 12px;
+    bottom: 40px;
   }
   .card-header {
     font-family: 'HKGrotesk-Semi';
-    font-size: 55px;
+    font-size: 27px;
+    margin-top: 0px;
+    margin-left: 0px;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
     color: #000;
   }
   .class {
-    font-family: 'HKGrotesk-Semi';
-    font-size: 30px;
+    font-family: 'HKGrotesk-Medium';
+    font-size: 15px;
     text-transform: uppercase;
     color: #3c73ff;
     letter-spacing: 1px;
-    margin-top: 60px;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 5px;
   }
   .text {
     font-family: 'HKGrotesk-Medium';
-    font-size: 25px;
-    line-height: 25px;
-    margin-top: 20px;
-    color: #666;
+    font-size: 12px;
+    line-height: 12px;
+    margin-top: 0px;
+    color: #222;
   }
   .remaining {
     font-family: 'HKGrotesk-Semi';
-    font-size: 25px;
+    font-size: 11px;
     margin-top: 20px;
     position: absolute;
-    right: 50px;
-    bottom: 20px;
+    right: 25px;
+    bottom: 10px;
     color: #3c73ff;
   }
   .friend {
@@ -271,12 +277,11 @@ html {
 
   .attend {
     font-family: 'HKGrotesk-Medium';
-    font-size: 25px;
-    margin-top: 20px;
+    font-size: 10px;
     letter-spacing: 1px;
     position: absolute;
-    right: 50px;
-    bottom: 10px;
+    bottom: 0;
+    right: 30px;
     color: #fff;
   }
 
@@ -291,15 +296,15 @@ html {
     color: #fff;
   }
   .attendance {
-    width: 750px;
-    height: 160px;
-    margin-left: -375px;
+    width: 250px;
+    height: 60px;
+    margin-left: -125px;
     left: 50%;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 600px;
+    border-radius: 100px;
     background-color: #fff;
     -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
     -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
@@ -308,10 +313,10 @@ html {
   }
   .atext {
     text-align: center;
-    font-size:60px;
+    font-size:21px;
     color: #3c73ff;
     font-family: 'HKGrotesk-Medium';
-    letter-spacing: 5px;
+    letter-spacing: 2px;
   }
     .red{
     color: #ff534d;
@@ -356,7 +361,7 @@ html {
       .left-<%=room.id %> {
         color: #fff;
         font-family: 'HKGrotesk-Medium';
-        letter-spacing: 2px;
+        letter-spacing: 1px;
       }
     <% elsif (room.capacity - @users.where(class_id: room.id).count) == 0 %>
       .class-<%=room.id %> {
@@ -370,10 +375,3 @@ html {
     <% end %>
   <% end %>
 </style>
-<% if current_user.student? %>
-<style>
-.fa {
-  top: 180px;
-}
-</style>
-<% end %>

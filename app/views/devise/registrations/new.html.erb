@@ -8,7 +8,7 @@
   </div>
 
   <div class="field">
-    <%= f.email_field :email, autocomplete: "off", required: true, required: true, placeholder: "Email", class: "input" %>
+    <%= f.email_field :email, autocomplete: "off", required: true, placeholder: "Email", class: "input" %>
   </div>
 
   <div class="field">
@@ -20,7 +20,7 @@
   </div>
 
   <div class="field">
-    <%= f.select(:home, User.all.where(role: 1).collect {|a| [a.last, a.id]}, {include_blank: "MTSS Homeroom"}, {class: "input", required: true}) %>
+    <%= f.select(:home, User.all.where(role: 1).collect {|a| [a.last, a.id]}, {prompt: "MTSS Homeroom"}, {class: "input", required: true}) %>
   </div>
 
   <div class="field">
@@ -39,12 +39,12 @@
 
 h2 {
   font-family: 'HKGrotesk-Bold';
-  font-size: 70px;
+  font-size: 27px;
   text-align: center;
-  margin-top: 150px;
+  margin-top: 52px;
   color: #3c73ff;
   text-transform: uppercase;
-  letter-spacing: 4px;
-  margin-bottom: 200px;
+  letter-spacing: 1.5px;
+  margin-bottom: 70px;
 }
 </style>

@@ -5,11 +5,6 @@ class RequestsControllerTest < ActionDispatch::IntegrationTest
     @request = requests(:one)
   end
 
-  test "should get index" do
-    get requests_url
-    assert_response :success
-  end
-
   test "should get new" do
     get new_request_url
     assert_response :success
@@ -26,23 +21,5 @@ class RequestsControllerTest < ActionDispatch::IntegrationTest
   test "should show request" do
     get request_url(@request)
     assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_request_url(@request)
-    assert_response :success
-  end
-
-  test "should update request" do
-    patch request_url(@request), params: { request: { name: @request.name } }
-    assert_redirected_to request_url(@request)
-  end
-
-  test "should destroy request" do
-    assert_difference('Request.count', -1) do
-      delete request_url(@request)
-    end
-
-    assert_redirected_to requests_url
   end
 end

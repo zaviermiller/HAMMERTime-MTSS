@@ -16,10 +16,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     current_user.last.capitalize!
     if current_user.studentid.include?("teacher")
       current_user.teacher!
+      current_user.today = Time.zone.today
       current_user.save!
-      redirect_to edit_user_registration_path(current_user)
     else
       current_user.student!
+      current_user.today = Time.zone.today
       current_user.friend = []
       current_user.save!
     end
