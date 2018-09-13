@@ -8,6 +8,8 @@ Bundler.require(*Rails.groups)
 
 module MTSS
   class Application < Rails::Application
+
+    config.time_zone = 'Central Time (US & Canada)'
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
