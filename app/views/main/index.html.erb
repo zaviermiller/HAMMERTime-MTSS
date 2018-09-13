@@ -20,7 +20,7 @@
           <% friends = 0 %>
           <% friendarr = [] %>
           <% unless current_user.friend == [] %>
-            <% current_user.friend.each do |friend| %>
+            <% eval(current_user.friend).each do |friend| %>
               <% if User.find_by_id(friend).class_id == room.id %>
                 <% friends += 1 %>
                 <% friendarr.push(User.find_by_id(friend).first) %>
@@ -123,19 +123,15 @@
       <% @rooms.each do |room| %>
         <% if room.occurs == Time.zone.today %>
         $('.card-<%= room.id %>').click(function() {
-          $('.signup-card').animate({
-                            bottom: "190px",
-                            "margin-bottom": "-150px"
-                          },300 );
-          if ($('.signup-<%= room.id %>').css("bottom") != "90px") {
+          if ($('.signup-<%= room.id %>').css("bottom") != "85px") {
             $('.signup-<%= room.id %>').animate({
-                              bottom: "90px",
-                              "margin-bottom": "-50px"
+                              bottom: "85px",
+                              "margin-bottom": "-70px"
                             },300 );
           }else {
             $('.signup-<%= room.id %>').animate({
-                              bottom: "190px",
-                              "margin-bottom": "-150px"
+                              bottom: "135px",
+                              "margin-bottom": "-100px"
                             },300 );
           }
         });
@@ -203,7 +199,7 @@ html {
     -moz-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
     box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
     z-index: 2;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
   }
   .signup-card {
     width: 280px;
@@ -218,8 +214,8 @@ html {
     box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
     position: relative;
     z-index: 1;
-    margin-bottom: -50px;
-    bottom: 190px;
+    bottom: 135px;
+    margin-bottom: -100px;
   }
   .card:last-child {
     opacity: .99;
@@ -267,11 +263,10 @@ html {
   }
   .friend {
     font-family: 'HKGrotesk-Medium';
-    font-size: 25px;
+    font-size: 12px;
     margin-top: 20px;
     position: absolute;
-    left: 50px;
-    bottom: 20px;
+    bottom: 5px;
     color: #b4b4b4;
   }
 
@@ -287,12 +282,10 @@ html {
 
   .friends {
     font-family: 'HKGrotesk-Medium';
-    font-size: 22px;
-    margin-top: 20px;
-    letter-spacing: 2px;
+    font-size: 12px;
+    bottom: -4px;
+    letter-spacing: 1px;
     position: absolute;
-    left: 70px;
-    bottom: 15px;
     color: #fff;
   }
   .attendance {
