@@ -1,3 +1,4 @@
+<%= image_tag("bg2.png", class: "bg") %>
 <% unless current_user.student? && current_user.today.monday? %>
   <%= link_to main_prev_path, method: :patch do %><i class="fa fa-angle-left"></i><% end %>
 <% end %>
@@ -6,6 +7,7 @@
 <% end %>
 <p class="day"><%= current_user.today.strftime('%A') %></p>
 <p class="date"><%= current_user.today.strftime('%B %e') %></p>
+<p class="addfriend"><i class="fas fa-user-plus"></i></p>
 <% if current_user.student? %>
   <% (0..5).each do |i| %>
     <p class="sub" style="position:relative; left: 30px; font-size: 12px;"><%= @departments[i] %> Department</p>
@@ -20,7 +22,7 @@
           <% friends = 0 %>
           <% friendarr = [] %>
           <% unless current_user.friend == [] %>
-            <% current_user.friend.each do |friend| %>
+            <% eval(current_user.friend).each do |friend| %>
               <% if User.find_by_id(friend).class_id == room.id %>
                 <% friends += 1 %>
                 <% friendarr.push(User.find_by_id(friend).first) %>
@@ -48,7 +50,7 @@
             <% end %>
           </p>
         </div>
-        <% unless (room.capacity - @users.where(class_id: room.id).count) == 0 || current_user.class_id == room.id || Time.current >= Time.zone.parse "12:35 pm"%>
+        <% unless (room.capacity - @users.where(class_id: room.id).count) == 0 || current_user.class_id == room.id%>
           <div class="signup-card signup-<%= room.id %>">
             <p class="friends">
               <% friendarr.each_with_index do |friend,index| %>
@@ -153,8 +155,8 @@ html {
   .fa {
     position: absolute;
     font-size: 35px;
-    color: #3c73ff;
-    top: 70px;
+    color: #fff;
+    top: 30px;
   }
   .fa-angle-left {
     left: 50px;
@@ -166,8 +168,9 @@ html {
     font-family: 'HKGrotesk-Bold';
     font-size: 27px;
     text-align: center;
-    margin-top: 35px;
-    color: #3c73ff;
+    margin-top: -10px;
+    z-index: 20;
+    color: #fff;
     text-transform: uppercase;
     letter-spacing: 1.75px;
   }
@@ -175,10 +178,15 @@ html {
     font-family: 'HKGrotesk-Medium';
     font-size: 20px;
     text-align: center;
-    color: #3c73ff;
+    color: #fff;
     margin-top: -15px;
     letter-spacing: 1px;
-    margin-bottom: 50px;
+  }
+  .addfriend {
+    margin-bottom: 75px;
+    color: #fff;
+    font-size: 20px;
+    text-align: center;
   }
   .sub {
     font-family: 'HKGrotesk-Medium';
@@ -313,6 +321,13 @@ html {
   }
     .red{
     color: #ff534d;
+  }
+  .bg {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -100;
   }
   .add {
       margin-bottom: 50px;
