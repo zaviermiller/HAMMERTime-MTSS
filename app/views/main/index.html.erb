@@ -5,9 +5,14 @@
 <% unless current_user.student? && current_user.today.friday? %>
   <%= link_to main_next_path, method: :patch do %><i class="fa fa-angle-right"></i><% end %>
 <% end %>
-<p class="day"><%= current_user.today.strftime('%A') %></p>
-<p class="date"><%= current_user.today.strftime('%B %e') %></p>
-<p class="addfriend"><i class="fas fa-user-plus"></i></p>
+<% if current_user.student? %>
+  <p class="day"><%= current_user.today.strftime('%A') %></p>
+  <p class="date"><%= current_user.today.strftime('%B %e') %></p>
+<% else %>
+<p class="day">Your MTSS</p>
+<p class="date">Week of <%= current_user.today.strftime('%b %e') %></p>
+<% end %>
+<%= link_to new_request_path do %><p class="addfriend"><i class="fas fa-user-plus"></i></p><% end %>
 <% if current_user.student? %>
   <% (0..5).each do |i| %>
     <p class="sub" style="position:relative; left: 30px; font-size: 12px;"><%= @departments[i] %> Department</p>

@@ -7,6 +7,11 @@ class MainController < ApplicationController
 
     else
 
+      if current_user.teacher?
+        current_user.today = (current_user.today - current_user.today.wday) + 1
+        current_user.save!
+      end
+
       if current_user.teacher? && current_user.room.nil?
         redirect_to edit_user_registration_path(current_user)
       end
@@ -16,6 +21,7 @@ class MainController < ApplicationController
       @room = Room.new
       @departments = Hash.new
       @departments = { 0 => "Science", 1 => "Math", 2 => "Social Studies", 3 => "English", 4 => "Fine Arts", 5 => "Electives" }
+
     end
 
     @rooms = Room.all
