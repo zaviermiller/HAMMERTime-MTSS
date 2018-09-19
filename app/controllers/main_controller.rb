@@ -7,11 +7,6 @@ class MainController < ApplicationController
 
     else
 
-      if current_user.teacher?
-        current_user.today = (current_user.today - current_user.today.wday) + 1
-        current_user.save!
-      end
-
       if current_user.teacher? && current_user.room.nil?
         redirect_to edit_user_registration_path(current_user)
       end
@@ -21,7 +16,7 @@ class MainController < ApplicationController
       @room = Room.new
       @departments = Hash.new
       @departments = { 0 => "Science", 1 => "Math", 2 => "Social Studies", 3 => "English", 4 => "Fine Arts", 5 => "Electives" }
-
+      @dates = { 1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday" }
     end
 
     @rooms = Room.all
@@ -49,8 +44,11 @@ class MainController < ApplicationController
     if current_user.today.sunday?
       current_user.today += 1
       current_user.save!
-    elsif current_user.today.saturday?
+    elsif current_user.today.saturday? && current_user.student?
       current_user.today += 2
+      current_user.save!
+    elsif current_user.today.saturday? && current_user.teacher?
+      current_user.today += 1
       current_user.save!
     end
 
@@ -60,12 +58,14 @@ class MainController < ApplicationController
   def prev
     current_user.today -= 1
     current_user.save!
-    if current_user.today.sunday?
+    if current_user.today.sunday? && current_user.student?
       current_user.today -= 2
       current_user.save!
     elsif current_user.today.saturday?
       current_user.today -= 1
       current_user.save!
+    elsif current_user.today.sunday? && current_user.teacher?
+      current_user.today -= 1
     end
 
     redirect_to root_path

@@ -5,15 +5,19 @@
 <% unless current_user.student? && current_user.today.friday? %>
   <%= link_to main_next_path, method: :patch do %><i class="fa fa-angle-right"></i><% end %>
 <% end %>
-<% if current_user.student? %>
-  <p class="day"><%= current_user.today.strftime('%A') %></p>
+<% unless current_user.today.sunday? %>
+  <% if current_user.student? %>
+    <p class="day"><%= current_user.today.strftime('%A') %></p>
+  <% else %>
+    <p class="day" style="font-family: 'HKGrotesk-Medium';">Attendance</p>
+  <% end %>
   <p class="date"><%= current_user.today.strftime('%B %e') %></p>
 <% else %>
-<p class="day">Your MTSS</p>
-<p class="date">Week of <%= current_user.today.strftime('%b %e') %></p>
+  <p class="day">Your MTSS</p>
+  <p class="date">Week of <%= (current_user.today + 1).strftime('%b %e') %></p>
 <% end %>
-<%= link_to new_request_path do %><p class="addfriend"><i class="fas fa-user-plus"></i></p><% end %>
 <% if current_user.student? %>
+  <%= link_to new_request_path do %><p class="addfriend"><i class="fas fa-user-plus"></i></p><% end %>
   <% (0..5).each do |i| %>
     <p class="sub" style="position:relative; left: 30px; font-size: 12px;"><%= @departments[i] %> Department</p>
     <% @users.where(dept: i).order('last ASC').each do |teacher| %>
@@ -69,64 +73,103 @@
     <% end %>
   <% end %>
 <% else %>
-  <% unless @rooms.exists?(user_id: current_user.id, occurs: current_user.today) %>
-    <%= form_with(model: @room) do |form| %>
-
-      <%= form.hidden_field :user_id, value: current_user.id %>
-
-      <div class="field">
-        <%= form.text_field :name, placeholder: "MTSS Name", class: "input" %>
-      </div>
-
-      <div class="field">
-        <%= form.number_field :capacity, placeholder: "Capacity",class: "input" %>
-      </div>
-
-      <div class="field">
-        <%= form.text_field :desc, placeholder: "Description", class: "input" %>
-      </div>
-
-      <%= form.hidden_field :occurs, value: current_user.today %>
-
-      <div class="actions">
-        <%= form.submit "Submit", class: "submit" %>
-      </div>
-    <% end %>
-  <% else %>
+  <% if @rooms.exists?(user_id: current_user.id, occurs: current_user.today) %>
     <% room = @rooms.where(user_id: current_user.id, occurs: current_user.today).first %>
     <% if room.occurs == Time.zone.today %>
-      <p class="sub" style="position:relative; left: 60px; font-size: 12px;">Attendance</p>
-      <% User.where(class_id: room.id).each do |student| %>
-        <% if student.absent? && room.occurs == Time.zone.today %>
-          <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext red"><%= student.first %> <%= student.last %></p></div><% end %>
-        <% elsif !student.absent? && room.occurs == Time.zone.today %>
-          <%= link_to absent_path(student), method: :patch do%><div class="attendance"><p class="atext"><%= student.first %> <%= student.last %></p></div><% end %>
-        <% end %>
-      <% end %>
-    <% else %>
-    <p class="sub" style="position:relative; left: 40px; font-size: 12px;">Your MTSS</p>
+      <p class="sub" style="position:relative; left: 30px; font-size: 12px;">Your MTSS</p>
       <div class="card">
-        <p class="card-header"><%= current_user.last %></p>
-        <p class="room sub">RM <%= current_user.room %></p>
-        <p class="class"><%= room.name %></p>
-        <p class="text"><%= room.desc %></p>
-        <p class="remaining">
-          <% if @users.where(class_id: room.id).count == 1 %>
-            <%= @users.where(class_id: room.id).count %> person attending this class
-          <% else %>
-            <%= @users.where(class_id: room.id).count %> people attending this class
-          <% end %>
-        </p>
+        <% @users.where(class_id: room.id).each do |user| %>
+          <span style="display:block;" >
+            <p style="display:inline-block; margin-top: 0; margin-bottom: 0;">
+              <% if user.absent == true %>
+                <%= link_to "A", absent_path(user), method: :patch %>
+              <% else %>
+                <%= link_to "P", absent_path(user), method: :patch %>
+              <% end %>
+            </p>
+            <p style="display:inline-block; margin-left: 20px; margin-top: 0; margin-bottom: 0;">
+              <%= user.first %> <%= user.last %>
+            </p>
+          </span>
+        <% end %>
       </div>
+      <p class="sub" style="position:relative; left: 30px; font-size: 12px;">Rostered MTSS</p>
+      <div class="card">
+        <% @users.where(home: current_user.id).each do |user| %>
+        <span style="display: block;">
+          <p style="display: inline;">
+            <% if user.absent == true %>
+              A
+            <% else %>
+              P
+            <% end %>
+          </p>
+          <p style="display:inline; margin-left: 20px; margin-top: 0; margin-bottom: 0;">
+            <%= user.first %> <%= user.last %>
+          </p>
+          <p style="display: inline; margin-left: 100px; margin-top: 0; margin-bottom: 0;">
+            <%= @users.where(id: (Room.where(id: user.class_id).first.user_id)).first.last %>
+          </p>
+        </span>
+        <% end %>
+      </div>
+    <% else %>
+    <% end %>
+  <% end %>
+  <% if current_user.today.sunday? %>
+    <% (1..5).each do |i| %>
+      <p class="sub" style="position:relative; left: 40px;"><%= @dates[i] %></p>
+      <% unless Room.exists?(occurs: (current_user.today + i), user_id: current_user.id) %>
+        <div class="addmtss add-<%= i %>">+</div>
+        <%= form_with(model: @room, html: {class: "form form-#{i}"}) do |form| %>
+
+          <%= form.hidden_field :user_id, value: current_user.id %>
+
+          <div class="field">
+            <%= form.text_field :name, placeholder: "MTSS Name", class: "input" %>
+          </div>
+
+          <div class="field">
+            <%= form.number_field :capacity, placeholder: "Capacity",class: "input" %>
+          </div>
+
+          <div class="field">
+            <%= form.text_field :desc, placeholder: "Description", class: "input" %>
+          </div>
+
+          <%= form.hidden_field :occurs, value: current_user.today + i%>
+
+          <div class="actions">
+            <%= form.submit "Submit", class: "submit", style: "margin-bottom: 30px;" %>
+          </div>
+        <% end %>
+      <% else %>
+        <% room = @rooms.where(user_id: current_user.id, occurs: current_user.today + i).first %>
+        <div class="card">
+          <p class="card-header"><%= current_user.last %></p>
+          <p class="room sub">RM <%= current_user.room %></p>
+          <p class="class"><%= room.name %></p>
+          <p class="text"><%= room.desc %></p>
+          <p class="remaining">
+            <% if room.capacity - @users.where(class_id: room.id).count == 1 %>
+              <%= room.capacity - @users.where(class_id: room.id).count %> slot left
+            <% else %>
+              <%= room.capacity - @users.where(class_id: room.id).count %> slots left
+            <% end %>
+          </p>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
 <script>
   $(document).ready(function() {
-    $('.attendance').click(function(){
-      $(this).css('background-color','#ff534d');
-      $('.atext').css('color','#fff');
-    });
+      <% (1..5).each do |i| %>
+        $('.add-<%= i %>').click(function() {
+          $(this).hide();
+          $('.form-<%= i %>').show();
+        });
+      <% end %>
       <% @rooms.each do |room| %>
         <% if room.occurs == Time.zone.today %>
         $('.card-<%= room.id %>').click(function() {
@@ -318,6 +361,24 @@ html {
     box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.1);
     margin-bottom: 30px;
   }
+  .addmtss {
+    width: 80%;
+    height: 30px;
+    position: relative;
+    border-radius: 5px;
+    font-size: 25px;
+    font-family: 'HKGrotesk-Medium';
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #3c73ff;
+    left: 50%;
+    margin-left: -40%;
+    background-color: #fff;
+    -webkit-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+    -moz-box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+    box-shadow: 4px 4px 16px 0px rgba(125,125,125,0.1);
+  }
   .atext {
     text-align: center;
     font-size:21px;
@@ -335,27 +396,9 @@ html {
     left: 0;
     z-index: -100;
   }
-  .add {
-      margin-bottom: 50px;
-      text-transform: uppercase;
-      width: 400px;
-      margin-left: -200px;
-      left: 50%;
-      position: relative;
-      height: 100px;
-      background-color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border-radius: 150px;
-      color:#3c73ff;
-      font-size: 35px;
-      font-family: 'HKGrotesk-Semi';
-      letter-spacing: 5px;
-      -webkit-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
-      -moz-box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
-      box-shadow: 4px 4px 34px 0px rgba(125,125,125,0.2);
-    }
+  .form {
+    display: none;
+  }
 
   <% @rooms.each do |room| %>
     <% if current_user.class_id == room.id %>
@@ -389,3 +432,10 @@ html {
     <% end %>
   <% end %>
 </style>
+<% if current_user.teacher? %>
+<style>
+  .date {
+    margin-bottom: 105px;
+  }
+</style>
+<% end %>
