@@ -95,22 +95,24 @@
       </div>
       <p class="sub" style="position:relative; left: 30px; font-size: 12px;">Rostered MTSS</p>
       <div class="card">
-        <% @users.where(home: current_user.id).each do |user| %>
-        <span style="display: block;">
-          <p style="display: inline;">
-            <% if user.absent == true %>
-              A
-            <% else %>
-              P
-            <% end %>
-          </p>
-          <p style="display:inline; margin-left: 20px; margin-top: 0; margin-bottom: 0;">
-            <%= user.first %> <%= user.last %>
-          </p>
-          <p style="display: inline; margin-left: 100px; margin-top: 0; margin-bottom: 0;">
-            <%= @users.where(id: (Room.where(id: user.class_id).first.user_id)).first.last %>
-          </p>
-        </span>
+        <% if @users.exists?(home: current_user.id) %>
+          <% @users.where(home: current_user.id).each do |user| %>
+          <span style="display: block;">
+            <p style="display: inline;">
+              <% if user.absent == true %>
+                A
+              <% else %>
+                P
+              <% end %>
+            </p>
+            <p style="display:inline; margin-left: 20px; margin-top: 0; margin-bottom: 0;">
+              <%= user.first %> <%= user.last %>
+            </p>
+            <p style="display: inline; margin-left: 100px; margin-top: 0; margin-bottom: 0;">
+              <%= @users.where(id: (Room.where(id: user.class_id).first.user_id)).first.last %>
+            </p>
+          </span>
+          <% end %>
         <% end %>
       </div>
     <% else %>
