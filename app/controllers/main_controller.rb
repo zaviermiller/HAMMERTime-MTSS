@@ -38,34 +38,49 @@ class MainController < ApplicationController
   end
 
   def next
-    current_user.today += 1
-    current_user.save!
+    if current_user.student?
+      current_user.today += 1
+      current_user.save!
 
-    if current_user.today.sunday?
-      current_user.today += 1
-      current_user.save!
-    elsif current_user.today.saturday? && current_user.student?
-      current_user.today += 2
-      current_user.save!
-    elsif current_user.today.saturday? && current_user.teacher?
-      current_user.today += 1
-      current_user.save!
+      if current_user.today.sunday?
+        current_user.today += 1
+        current_user.save!
+      elsif current_user.today.saturday?
+        current_user.today += 2
+        current_user.save!
+      end
+    else
+      if current_user.today == Time.zone.today
+        current_user.today = Time.zone.today - Time.zone.today.wday
+        current_user.save!
+      else
+        current_user.today = Time.zone.today
+        current_user.save!
+      end
     end
 
     redirect_to root_path
   end
 
   def prev
-    current_user.today -= 1
-    current_user.save!
-    if current_user.today.sunday? && current_user.student?
-      current_user.today -= 2
-      current_user.save!
-    elsif current_user.today.saturday?
+    if current_user.student?
       current_user.today -= 1
       current_user.save!
-    elsif current_user.today.sunday? && current_user.teacher?
-      current_user.today -= 1
+      if current_user.today.sunday?
+        current_user.today -= 2
+        current_user.save!
+      elsif current_user.today.saturday?
+        current_user.today -= 1
+        current_user.save!
+      end
+    else
+      if current_user.today == Time.zone.today
+        current_user.today = Time.zone.today - Time.zone.today.wday
+        current_user.save!
+      else
+        current_user.today = Time.zone.today
+        current_user.save!
+      end
     end
 
     redirect_to root_path
