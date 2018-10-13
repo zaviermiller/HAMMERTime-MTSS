@@ -11,6 +11,7 @@ class MainController < ApplicationController
         redirect_to edit_user_registration_path(current_user)
       end
 
+      @test = 1
       @users = User.all
       @rooms = Room.all
       @room = Room.new
