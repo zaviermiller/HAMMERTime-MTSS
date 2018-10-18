@@ -8,6 +8,7 @@ namespace :tasks do
     User.all.each do |user|
       user.absent = false
       user.today = Time.zone.today
+      user.class_id = 0
       user.save!
       print('Data reset for ' + user.first + ' ' + user.last + '.')
     end
