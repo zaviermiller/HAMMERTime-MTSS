@@ -109,7 +109,7 @@
               <%= user.first %> <%= user.last %>
             </p>
             <p style="display: inline; margin-left: 100px; margin-top: 0; margin-bottom: 0;">
-              <% unless Room.all.where(id: user.class_id).nil? %>
+              <% unless Room.all.where(id: user.class_id).first.nil? %>
                 <%= @users.where(id: (Room.all.where(id: user.class_id).first.user_id)).first.last %>
               <% end %>
             </p>
