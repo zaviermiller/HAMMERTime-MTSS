@@ -1,28 +1,28 @@
 namespace :tasks do
   desc "Destroy all requests, set absent to 0, and set date to today everyday"
   task delete_requests: :environment do
-    print("Deleting requests...")
+    puts("Deleting requests...")
     Request.delete_all
-    print('Requests deleted.')
-    print("Setting user data...")
+    puts('Requests deleted.')
+    puts("Setting user data...")
     User.all.each do |user|
       user.absent = false
       user.today = Time.zone.today
-      user.class_id = 0
+      user.class_id = Room.all.where(user_id: User.all.where(id: user.home),date: Time.zone.today)
       user.save!
-      print('Data reset for ' + user.first + ' ' + user.last + '.')
+      puts('Data reset for ' + user.first + ' ' + user.last + '.')
     end
-    print('All users reset.')
+    puts('All users reset.')
   end
 
   desc "Destroy all rooms on Friday"
   task delete_rooms: :environment do
     if Time.zone.today.saturday?
-      print("Deleting rooms...")
+      puts("Deleting rooms...")
       Room.delete_all
-      print("Past week rooms deleted.")
+      puts("Past week rooms deleted.")
     else
-      print("No rooms deleted.")
+      puts("No rooms deleted.")
     end
   end
 

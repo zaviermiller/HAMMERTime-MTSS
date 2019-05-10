@@ -17,9 +17,9 @@
   <p class="date">Week of <%= (current_user.today + 1).strftime('%b %e') %></p>
 <% end %>
 <% if current_user.student? %>
-  <%= link_to new_request_path do %><p class="addfriend"><i class="fas fa-user-plus"></i></p><% end %>
+  <%= link_to view_request_path(current_user.studentid) do %><p class="addfriend"><i class="fas fa-user-friends"></i></p><% end %>
   <% (0..5).each do |i| %>
-    <p class="sub" style="position:relative; left: 30px; font-size: 12px;"><%= @departments[i] %> Department</p>
+    <p class="sub dept"><%= @departments[i] %> Department</p>
     <% @users.where(dept: i).order('last ASC').each do |teacher| %>
       <% unless @rooms.where(user_id: teacher.id, occurs: current_user.today).first.nil? %>
         <% room = @rooms.where(user_id: teacher.id, occurs: current_user.today).first %>
@@ -201,7 +201,6 @@ html {
   overflow-x: hidden;
 }
   body {
-    background-color: #fafafa;
     margin: 33px 0 !important;
     margin-top: 0px !important;
   }
@@ -212,10 +211,10 @@ html {
     top: 30px;
   }
   .fa-angle-left {
-    left: 50px;
+    left: 33%;
   }
   .fa-angle-right {
-    right: 50px;
+    right: 33%;
   }
   .day {
     font-family: 'HKGrotesk-Bold';
@@ -246,6 +245,12 @@ html {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: #b4b4b4;
+  }
+  .dept {
+    position:relative;
+    left: 45%;
+    margin-left: -150px;
+    font-size: 12px;
   }
   .card {
     width: 260px;
@@ -394,11 +399,29 @@ html {
     color: #ff534d;
   }
   .bg {
-    width: 100%;
+    width: 40%;
     position: absolute;
-    top: 0;
-    left: 0;
+    left: 50%;
+    margin-left: -20%;
     z-index: -100;
+  }
+  @media only screen and (max-width: 500px) {
+    .bg {
+      width: 100%;
+      margin-left: 0;
+      top: 0;
+      left: 0;
+    }
+    .dept {
+      left: 30px;
+      margin-left: 0;
+    }
+    .fa-angle-left {
+      left: 50px;
+    }
+    .fa-angle-right {
+      right: 50px;
+    }
   }
   .form {
     display: none;

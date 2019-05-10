@@ -6,6 +6,13 @@ class RequestsController < ApplicationController
   def show
   end
 
+  def view
+    if current_user.studentid != params[:id]
+      redirect_to root_path
+    end
+    @requests = Request.where(reqsi: params[:id])
+  end
+
   # GET /requests/new
   def new
     @request = Request.new
@@ -15,6 +22,7 @@ class RequestsController < ApplicationController
   # POST /requests.json
   def create
     @request = Request.new(request_params)
+    @request.user_id = current_user.id
 
     respond_to do |format|
       if @request.save
@@ -35,6 +43,6 @@ class RequestsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def request_params
-      params.require(:request).permit(:name)
+      params.require(:request).permit(:name,:reqsi,:user_id)
     end
 end

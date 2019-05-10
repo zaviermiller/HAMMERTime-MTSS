@@ -11,6 +11,10 @@ gem 'sqlite3' , group: :development
 gem 'pg', group: :production
 gem 'rails_12factor', group: :production
 
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
+
+
 gem 'simplecov', require: false, group: :test
 # Use Puma as the app server
 gem 'puma', '~> 3.11'

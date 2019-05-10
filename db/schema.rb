@@ -10,12 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_11_021839) do
+ActiveRecord::Schema.define(version: 2018_09_11_021840) do
 
   create_table "requests", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
+    t.string "reqsi"
+    t.index ["user_id"], name: "index_requests_on_user_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -51,11 +54,6 @@ ActiveRecord::Schema.define(version: 2018_09_11_021839) do
     t.text "desc"
     t.integer "room"
     t.integer "dept"
-    t.integer "f1"
-    t.integer "f2"
-    t.integer "f3"
-    t.integer "f4"
-    t.integer "f5"
     t.text "friend", default: "--- []\n"
     t.string "home"
     t.date "today"

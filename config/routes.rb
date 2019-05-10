@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :requests
+  get 'attendance', to: 'attendance#show', as: 'attendance'
+  resources :requests do
+    member do
+      get :view
+    end
+  end
   resources :rooms do
     member do
       patch :signup
@@ -14,6 +19,8 @@ Rails.application.routes.draw do
   get 'main/home'
   patch 'main/next'
   patch 'main/prev'
+  patch 'main/accept/:id', to: 'main#accept', as: 'accept'
+  patch 'main/deny/:id', to: 'main#deny', as: 'deny'
   patch '/absent/:id', to: "main#absent", as: "absent"
   patch '/add-friend/:id', to: "main#addfriend", as: "add"
 

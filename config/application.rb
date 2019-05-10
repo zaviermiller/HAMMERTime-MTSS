@@ -10,6 +10,8 @@ module MTSS
   class Application < Rails::Application
 
     config.time_zone = 'Central Time (US & Canada)'
+    require 'wicked_pdf'
+    config.middleware.use WickedPdf::Middleware
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 

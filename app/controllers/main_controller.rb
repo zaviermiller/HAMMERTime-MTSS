@@ -89,10 +89,29 @@ class MainController < ApplicationController
 
   def addfriend
     @friend = User.find_by(id: params[:id])
+    request = current_user.requests.last
+
+    request.reqsi = @friend.studentid
+    request.save!
+
+    redirect_to view_request_path(current_user.studentid)
+  end
+
+  def accept
+    @request = Request.find(params[:id])
+    @friend = @request.user
+    @friend.friend = @friend.friend.push(current_user.id)
+    @friend.save!
     current_user.friend = current_user.friend.push(@friend.id)
     current_user.save!
+    @request.delete
     redirect_to root_path
+  end
 
+  def deny
+    @request = Request.find(params[:id])
+    @request.delete
+    redirect_to root_path
   end
 
 end
