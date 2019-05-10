@@ -94,6 +94,7 @@ class MainController < ApplicationController
     request.reqsi = @friend.studentid
     request.save!
 
+    flash[:notice] = "Friend request sent."
     redirect_to view_request_path(current_user.studentid)
   end
 
@@ -105,6 +106,7 @@ class MainController < ApplicationController
     current_user.friend = current_user.friend.push(@friend.id)
     current_user.save!
     @request.delete
+    flash[:notice] = "Added #{@friend.first} to your friends."
     redirect_to root_path
   end
 

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  serialize :friend, Array
+
   has_many :rooms
   has_many :requests
   # Include default devise modules. Others available are:

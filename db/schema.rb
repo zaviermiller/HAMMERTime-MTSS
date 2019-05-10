@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 2018_09_11_021840) do
     t.text "desc"
     t.integer "room"
     t.integer "dept"
-    t.text "friend", default: "--- []\n"
+    t.text "friend"
     t.string "home"
     t.date "today"
     t.boolean "absent"
