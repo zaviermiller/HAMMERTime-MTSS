@@ -76,7 +76,7 @@
   <% if @rooms.exists?(user_id: current_user.id, occurs: current_user.today) %>
     <% room = @rooms.where(user_id: current_user.id, occurs: current_user.today).first %>
     <% if room.occurs == Time.zone.today %>
-      <p class="sub" style="position:relative; left: 30px; font-size: 12px;">Your MTSS</p>
+      <p class="sub dept">Your MTSS</p>
       <div class="card">
         <% @users.where(class_id: room.id).each do |user| %>
           <span style="display:block;" >
@@ -93,7 +93,7 @@
           </span>
         <% end %>
       </div>
-      <p class="sub" style="position:relative; left: 30px; font-size: 12px;">Rostered MTSS</p>
+      <p class="sub dept">Rostered MTSS</p>
       <div class="card">
         <% if @users.exists?(home: current_user.id) %>
           <% @users.where(home: current_user.id).each do |user| %>
@@ -108,7 +108,7 @@
             <p style="display:inline; margin-left: 20px; margin-top: 0; margin-bottom: 0;">
               <%= user.first %> <%= user.last %>
             </p>
-            <p style="display: inline; margin-left: 100px; margin-top: 0; margin-bottom: 0;">
+            <p style="display: inline; float:right; margin-top: 0; margin-bottom: 0;">
               <% unless Room.all.where(id: user.class_id).first.nil? %>
                 <%= @users.where(id: (Room.all.where(id: user.class_id).first.user_id)).first.last %>
               <% end %>
@@ -122,7 +122,7 @@
   <% end %>
   <% if current_user.today.sunday? %>
     <% (1..5).each do |i| %>
-      <p class="sub" style="position:relative; left: 40px;"><%= @dates[i] %></p>
+      <p class="sub dept"><%= @dates[i] %></p>
       <% unless Room.exists?(occurs: (current_user.today + i), user_id: current_user.id) %>
         <div class="addmtss add-<%= i %>">+</div>
         <%= form_with(model: @room, html: {class: "form form-#{i}"}) do |form| %>
