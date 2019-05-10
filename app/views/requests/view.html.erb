@@ -1,0 +1,49 @@
+<h2>Friend Requests</h2>
+  <p class="add"><%= link_to new_request_path do %><i class="fa fa-2x fa-user-plus"></i><% end %></p>
+<% @requests.each do |request| %>
+  <p class="request"><%= link_to deny_path(request), method: :patch do %><i class='fas fa-lg fa-minus'></i><% end %><strong class="name"><%= "#{request.user.first} #{request.user.last}" %></strong><%= link_to accept_path(request), method: :patch do %><i class="fa fa-lg fa-plus"></i><% end %></p>
+<% end %>
+<p class="add"><%= link_to main_index_path do %><i class="fa fa-2x fa-sign-out-alt fa-rotate-180"></i><% end %></p>
+<style media="screen">
+  h2 {
+    font-family: 'HKGrotesk-Bold';
+    font-size: 27px;
+    text-align: center;
+    margin-top: 52px;
+    color: #3c73ff;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 30px;
+  }
+  .fa-minus {
+    color: #ff534d;
+    position:relative;
+    bottom: 4px;
+  }
+  .fa-plus {
+    color:#3c73ff;
+    position:relative;
+    bottom: 4px;
+  }
+  .fa-user-plus {
+    color: #444;
+  }
+  .fa-sign-out-alt {
+    color: #3c73ff;
+  }
+  .add {
+    text-align:center;
+    margin-bottom: 50px;
+  }
+  .request {
+    text-align:center;
+    vertical-align:middle;
+  }
+  .name {
+    font-size:28px;
+    padding: 0 20px;
+    color: #333;
+    font-family: 'HKGrotesk-Medium';
+    letter-spacing: 3px;
+  }
+</style>
